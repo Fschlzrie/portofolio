@@ -1,0 +1,56 @@
+---
+// src/layouts/BaseLayout.astro
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string; // path gambar preview, contoh "/og-image.png"
+}
+
+const {
+  title,
+  description = "Portofolio desainer grafis, UI/UX, dan web developer.", // ganti dengan deskripsimu
+  image = "/preview-img.png", // taruh gambar 1200x630 di folder public
+} = Astro.props;
+
+const siteName = "Nama Kamu"; // ganti
+const fullTitle = "Portofolio Test" 
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const imageUrl = Astro.site ? new URL(image, Astro.site) : image;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="generator" content={Astro.generator} />
+    <slot name="head" />
+  </head>
+
+  <body>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,45 @@
+---
+// src/components/Footer.astro
+const siteName = "Rie Skibidis lil nis nus";
+const email = "halo@namakamu.com";
+
+const socials = [
+  { label: "GitHub", href: "https://github.com/username" },
+  { label: "Behance", href: "https://behance.net/username" },
+  { label: "LinkedIn", href: "https://linkedin.com/in/username" },
+  { label: "Instagram", href: "https://instagram.com/fachriee.png" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-black/10 text-neutral-600">
+  <div class="max-w-275 mx-auto px-5 py-6 flex justify-between items-center gap-4 flex-wrap">
+    <p class="m-0">© {year} {siteName}</p>
+
+    <ul class="flex gap-5 flex-wrap m-0 p-0 list-none">
+      {
+        socials.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-inherit underline-offset-4 hover:text-neutral-900 hover:underline"
+            >
+              {s.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href={`mailto:${email}`}
+          class="text-inherit underline-offset-4 hover:text-neutral-900 hover:underline"
+        >
+          Email
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>

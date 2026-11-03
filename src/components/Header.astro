@@ -1,0 +1,82 @@
+---
+// src/components/Header.astro
+const siteName = "Fachriee";
+
+const nav = [
+  { label: "Karya", href: "/works" },
+  { label: "Tentang", href: "/about" },
+  { label: "Kontak", href: "/contact" },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href + "/");
+---
+
+<!--
+  Cara kerja:
+  - <header> memegang atribut data-scrolled ("false" / "true"), diubah oleh script di bawah.
+  - Elemen "bar" di dalamnya membaca atribut itu lewat group-data-[scrolled=true]:...
+  - Di atas halaman: bar selebar layar. Setelah scroll: bar menciut jadi pill di tengah.
+  - pointer-events-none di <header> agar area kosong di kiri-kanan pill tidak menghalangi klik.
+-->
+<header
+  id="site-header"
+  data-scrolled="false"
+  class="group fixed inset-x-0 top-0 z-10 flex justify-center pointer-events-none"
+>
+  <div
+    class="pointer-events-auto w-full max-w-full bg-white/80 backdrop-blur-md border-b border-black/10 px-5 py-3.5
+           transition-all duration-300 ease-out motion-reduce:transition-none
+           group-data-[scrolled=true]:mt-3
+           group-data-[scrolled=true]:w-[calc(100%-1.5rem)]
+           group-data-[scrolled=true]:max-w-xl
+           group-data-[scrolled=true]:rounded-full
+           group-data-[scrolled=true]:border
+           group-data-[scrolled=true]:px-6
+           group-data-[scrolled=true]:py-2
+           group-data-[scrolled=true]:shadow-lg
+           group-data-[scrolled=true]:shadow-black/5"
+  >
+    <div class="max-w-275 mx-auto flex justify-between items-center gap-4">
+      <a class="font-bold text-inherit no-underline" href="/">{siteName}</a>
+
+      <nav aria-label="Navigasi utama">
+        <ul class="flex gap-5 m-0 p-0 list-none">
+          {
+            nav.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    class:list={[
+                      "no-underline pb-0.5 border-b-2 transition-colors duration-150",
+                      active
+                        ? "text-neutral-900 border-current"
+                        : "text-neutral-600 border-transparent hover:text-neutral-900",
+                    ]}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("site-header");
+
+  // Ubah angka 24 kalau ingin efeknya aktif lebih cepat atau lebih lambat (dalam piksel)
+  const update = () => {
+    header?.setAttribute("data-scrolled", String(window.scrollY > 24));
+  };
+
+  update(); // cek sekali saat halaman dimuat (misal reload di tengah halaman)
+  window.addEventListener("scroll", update, { passive: true });
+</script>
